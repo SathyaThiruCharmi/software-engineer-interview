@@ -10,9 +10,10 @@ namespace Zip.InstallmentsService.Test
         {
             // Arrange
             var paymentPlanFactory = new PaymentPlanFactory();
-            
+
+            PaymentPlan Payment = new PaymentPlan();
             // Act
-            var paymentPlan = paymentPlanFactory.CreatePaymentPlan(123.45M);
+            var paymentPlan = paymentPlanFactory.CreatePaymentPlan1(100,4,14);
 
             // Assert
             paymentPlan.ShouldNotBeNull();

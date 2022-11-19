@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zip.InstallmentsService
 {
@@ -10,6 +11,7 @@ namespace Zip.InstallmentsService
         /// <summary>
         /// Gets or sets the unique identifier for each installment.
         /// </summary>
+        
         public Guid Id { get; set; }
 
         /// <summary>
