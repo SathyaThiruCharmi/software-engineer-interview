@@ -18,5 +18,7 @@ namespace Zip.InstallmentService.Api.Data
 
         public DbSet<Zip.InstallmentsService.PaymentPlan> PaymentPlan { get; set; } = default!;
 
+        public DbSet<Zip.InstallmentsService.Installment> Installment { get; set; } = default!;
+
     }
 }

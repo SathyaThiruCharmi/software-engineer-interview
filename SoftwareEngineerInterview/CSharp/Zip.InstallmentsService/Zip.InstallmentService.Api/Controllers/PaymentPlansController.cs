@@ -62,7 +62,7 @@ namespace Zip.InstallmentService.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPaymentPlan(Guid id, PaymentPlan paymentPlan)
         {
-            if (id != paymentPlan.Id)
+            if (id != paymentPlan.PaymentID)
             {
                 return BadRequest();
             }
@@ -71,6 +71,19 @@ namespace Zip.InstallmentService.Api.Controllers
 
             try
             {
+                DateTime date = DateTime.Now;
+
+                foreach (Installment installment1 in _context.Installment)
+                {
+                    if (installment1.PaymentID == id)
+                    {
+                        installment1.DueDate = date;
+                        date = date.AddDays(paymentPlan.Frequency);
+                        installment1.DueAmount = paymentPlan.PurchaseAmount / paymentPlan.NoOfInstallments;
+                        _context.Installment.Update(installment1);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -98,25 +111,23 @@ namespace Zip.InstallmentService.Api.Controllers
         
         public async Task<ActionResult<PaymentPlan>> PostPaymentPlan(PaymentPlan paymentPlan)
         {
-            var paymentPlanFactory = new PaymentPlanFactory();
+            if (ModelState.IsValid)
+            {
+                paymentPlan.PaymentID = Guid.NewGuid();
+                var paymentPlanFactory = new PaymentPlanFactory();
 
-            //decimal installmentAmount = paymentPlan.PurchaseAmount / paymentPlan.Installment;
+                List<Installment> installments = paymentPlanFactory.CreatePaymentPlan(paymentPlan);
 
-            //for (int i = 0; i < paymentPlan.Installment; i++)
-            //{
-            //    Installment installment = new Installment();
-            //    installment.InstallmentId = paymentPlan.Id;
-            //    installment.DueDate = DateTime.Now.AddDays(paymentPlan.Frequeny);
-            //    installment.Amount = installmentAmount;
-            //    paymentPlan.Installments.Add(installment);
-            //}
+                foreach(Installment installment in installments)
+                {
+                    _context.Installment.Add(installment);
+                }
 
-            paymentPlan = paymentPlanFactory.CreatePaymentPlan(paymentPlan);
+                _context.PaymentPlan.Add(paymentPlan);
+                await _context.SaveChangesAsync();
+            }
 
-            _context.PaymentPlan.Add(paymentPlan);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPaymentPlan", new { id = paymentPlan.Id }, paymentPlan);
+            return CreatedAtAction("GetPaymentPlan", new { id = paymentPlan.PaymentID }, paymentPlan);
         }
 
         /// <summary>
@@ -135,6 +146,15 @@ namespace Zip.InstallmentService.Api.Controllers
             }
 
             _context.PaymentPlan.Remove(paymentPlan);
+
+            foreach(Installment installment1 in _context.Installment)
+            {
+                if (installment1.PaymentID == id)
+                {
+                    _context.Installment.Remove(installment1);
+                }
+            }
+ 
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -142,7 +162,7 @@ namespace Zip.InstallmentService.Api.Controllers
 
         private bool PaymentPlanExists(Guid id)
         {
-            return _context.PaymentPlan.Any(e => e.Id == id);
+            return _context.PaymentPlan.Any(e => e.PaymentID == id);
         }
     }
 }

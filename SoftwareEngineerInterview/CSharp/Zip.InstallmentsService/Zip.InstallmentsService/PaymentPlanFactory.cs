@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Zip.InstallmentsService
 {
@@ -12,43 +13,49 @@ namespace Zip.InstallmentsService
         /// </summary>
         /// <param name="purchaseAmount">The total amount for the purchase that the customer is making.</param>
         /// <returns>The PaymentPlan created with all properties set.</returns>
-        public PaymentPlan CreatePaymentPlan(PaymentPlan paymentPlan)
+        public List<Installment> CreatePaymentPlan(PaymentPlan paymentPlan)
         {   
-            Installment installment = new Installment();
-            decimal installmentAmount = paymentPlan.PurchaseAmount / paymentPlan.Installment;
+            paymentPlan.PaymentID = Guid.NewGuid();
+            DateTime date = DateTime.Now;
 
-            for (int i = 0; i < paymentPlan.Installment; i++)
+            List<Installment> installments = new List<Installment>();
+
+            for (int i = 0; i < paymentPlan.NoOfInstallments; i++)
             {
-                installment.Id = paymentPlan.Id;
-                installment.DueDate = DateTime.Now.AddDays(paymentPlan.Frequeny);
-                installment.Amount= installmentAmount;
-                paymentPlan.Installments.Add(installment);
+                Installment installment = new Installment();
+                installment.InstallmentID = Guid.NewGuid();
+                installment.PaymentID = paymentPlan.PaymentID;
+                installment.DueDate = date;
+                date = date.AddDays(paymentPlan.Frequency);
+                installment.DueAmount = paymentPlan.PurchaseAmount / paymentPlan.NoOfInstallments;
+                installments.Add(installment);
             }
 
             // TODO
-            return paymentPlan;
+            return installments;
         }
 
-        public PaymentPlan CreatePaymentPlan1(decimal payment, int installment, int frequency)
+        public List<Installment> CreatePaymentPlan1(decimal PurchaseAmount, int Frequency, int NoofInstallments)
         {
             PaymentPlan paymentPlan = new PaymentPlan();
-            Installment installments = new Installment();
+            paymentPlan.PaymentID = Guid.NewGuid();
+            DateTime date = DateTime.Now;
 
-            paymentPlan.Installment = installment;
-            paymentPlan.Frequeny = frequency;
-            
-            decimal installmentAmount = payment / installment;
+            List<Installment> installments = new List<Installment>();
 
-            for (int i = 1; i < paymentPlan.Installment; i++)
+            for (int i = 0; i < paymentPlan.NoOfInstallments; i++)
             {
-                installments.Id = Guid.NewGuid();
-                installments.DueDate = DateTime.Now.AddDays(paymentPlan.Frequeny);
-                installments.Amount = installmentAmount;
-                paymentPlan.Installments.Add(installments);
+                Installment installment = new Installment();
+                installment.InstallmentID = Guid.NewGuid();
+                installment.PaymentID = paymentPlan.PaymentID;
+                installment.DueDate = date;
+                date = date.AddDays(paymentPlan.Frequency);
+                installment.DueAmount = paymentPlan.PurchaseAmount / paymentPlan.NoOfInstallments;
+                installments.Add(installment);
             }
 
             // TODO
-            return paymentPlan;
+            return installments;
         }
     }
 }

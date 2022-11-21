@@ -12,17 +12,9 @@ namespace Zip.InstallmentsService
     public class PaymentPlan
     {
         [Key]
-        public Guid Id { get; set; }
-
-		public decimal PurchaseAmount { get; set; }
-
-        public int Installment { get; set; }
-
-        public int Frequeny { get; set; }
-
-        //[ForeignKey("Id")]
-        public List<Installment> Installments { get; set; }
+        public System.Guid PaymentID { get; set; }
+        public decimal PurchaseAmount { get; set; }
+        public int Frequency { get; set; }
+        public int NoOfInstallments { get; set; }
     }
-
-
 }

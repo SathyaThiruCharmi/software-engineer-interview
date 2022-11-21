@@ -1,10 +1,13 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using Xunit;
 
 namespace Zip.InstallmentsService.Test
 {
+    [TestClass]
     public class PaymentPlanFactoryTests
     {
+        [TestMethod]
         [Fact]
         public void WhenCreatePaymentPlanWithValidOrderAmount_ShouldReturnValidPaymentPlan()
         {

@@ -8,20 +8,9 @@ namespace Zip.InstallmentsService
     /// </summary>
     public class Installment
     {
-        /// <summary>
-        /// Gets or sets the unique identifier for each installment.
-        /// </summary>
-        
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date that the installment payment is due.
-        /// </summary>
-        public DateTime DueDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the amount of the installment.
-        /// </summary>
-        public decimal Amount { get; set; }
-	}
+        public System.Guid InstallmentID { get; set; }
+        public System.DateTime DueDate { get; set; }
+        public decimal DueAmount { get; set; }
+        public System.Guid PaymentID { get; set; }
+    }
 }
