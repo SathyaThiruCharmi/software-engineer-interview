@@ -26,7 +26,7 @@ namespace Zip.InstallmentService.Api.Controllers
         }
 
         /// <summary>
-        /// Getting the payment plan
+        /// Getting all the payment plans and corresponding installments
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -36,7 +36,7 @@ namespace Zip.InstallmentService.Api.Controllers
         }
 
         /// <summary>
-        /// Getting the payment plan based on Id
+        /// Getting the payment plan and installments based on Payment Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -54,7 +54,7 @@ namespace Zip.InstallmentService.Api.Controllers
         }
 
         /// <summary>
-        /// Updating the payment plan
+        /// Updating the payment plan and corresponding installment details
         /// </summary>
         /// <param name="id"></param>
         /// <param name="paymentPlan"></param>
@@ -103,7 +103,7 @@ namespace Zip.InstallmentService.Api.Controllers
 
         // POST: api/PaymentPlans
         /// <summary>
-        /// Creating the payment plan
+        /// Posting the payment plan and Installment detailsbased on payment plan
         /// </summary>
         /// <param name="paymentPlan"></param>
         /// <returns></returns>
@@ -131,7 +131,7 @@ namespace Zip.InstallmentService.Api.Controllers
         }
 
         /// <summary>
-        /// Deleting the payment plan based on id as input
+        /// Deleting the payment plan and associated installments based on provided payment id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -160,6 +160,11 @@ namespace Zip.InstallmentService.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Checking if Payment Plan exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool PaymentPlanExists(Guid id)
         {
             return _context.PaymentPlan.Any(e => e.PaymentID == id);
